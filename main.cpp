@@ -2,8 +2,10 @@
 #include"Segment.h"
 #include<string>
 #include<thread>
+
 #include<vector>
 #include<chrono>
+
 using namespace std;
 
 
@@ -16,17 +18,31 @@ void chooseChar(char *ch){//& sends a reference to the function
 
 
 Segment n;//don't keep this here
+vector<int> xPos;
+vector<int> yPos;
+
 void game(char *ch){
 	//mvprintw(0,0,"\n");
-	n.changeDirection(*ch,true);
-	n.updatePos();
-
+	if(*ch == 'x'){
+		*ch = '1';
+		n.addNext();
+	}
+	n.changeDirection(*ch);
+	n.updatePos(&n);
 	this_thread::sleep_for(50ms);
 	clear();
-	
-
-	mvprintw(n.getYPos(),n.getXPos(),"X");
-
+	xPos.clear();
+	yPos.clear();
+	xPos = n.getAllYPos();
+	yPos = n.getAllXPos();
+	for(int i = 0; i < xPos.size(); i++){
+		mvprintw(0,0,"xPos.size()%i",xPos.size());//don't forget the \n
+		mvprintw(1,0,"xPos%i\n",xPos.back());
+		
+		//mvprintw(1,0,"Head xPos: %i",n.getHeadXPos());
+		//mvprintw(2,0,"Head yPos: %i",n.getHeadYPos());
+		mvprintw(xPos[i],yPos[i],"%c", n.getLetter(i));
+	}
 
 	//mvprintw(0,0,"Character pressed %i", n.getDirection());
 	refresh();
@@ -49,7 +65,10 @@ int main()
 	vector<thread> threads;		/*use a vector to hold the threads while*/
 	noecho();
 	keypad(stdscr,true);
-	
+
+
+	//xPos = n.getXPos();
+	//yPos = n.getYPos();
 	threads.push_back(thread(loop,&game,&ch));
 	threads.push_back(thread(loop,&chooseChar,&ch));
 
