@@ -29,7 +29,7 @@ void game(char *ch){
 	}
 	n.changeDirection(*ch,&n);
 	n.updatePos(&n);
-	this_thread::sleep_for(50ms);
+	this_thread::sleep_for(100ms);
 	clear();
 	xPos.clear();
 	yPos.clear();

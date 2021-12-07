@@ -34,6 +34,7 @@ Segment::Segment(Direction d, int x, int y,queue<DirectionXY> oldQueue){
 	}
 	xPos = x;
 	yPos = y;
+	int oldSize = oldQueue.size();
 	segTurns = oldQueue;
 	next = NULL;
 }
@@ -61,7 +62,7 @@ int Segment::getHeadYPos(){
 
 void Segment::changeDirection(char ch, Segment *seg){
 
-	switch(head){
+	switch(seg->head){
 	case true:
 		switch(ch){
 			case 'w':
@@ -135,7 +136,6 @@ void Segment::updatePos(Segment *seg){
 				break;
 			}
 		break;
-
 		case down:
 			switch(seg->yPos){
 				case bottomBoundary:
@@ -193,6 +193,10 @@ vector<int> Segment::getAllYPos(){
 
 
 }
+
+
+
+
 int Segment::getLastXPos(){
 
 	int lastX;
@@ -232,7 +236,7 @@ void Segment::addNext(){
 		for(; q->next != NULL; q = q->next){
 			d = q->direction;
 		}
-		q->next = new Segment(d,q->xPos,q->yPos,segTurns);
+		q->next = new Segment(d,q->xPos,q->yPos,q->segTurns);
 	}
 
 }
