@@ -1,24 +1,35 @@
 #pragma once
 #include<cstddef>
+#include"utility.h"
 #include<vector>
+#include<queue>
 using namespace std;
+
+struct DirectionXY{
+	public:
+		int x;
+		int y;
+		Direction direction;
+};
+
+
 class Segment{
 	private:
-                enum Direction{up, down, left, right, no};
-                Direction direction;
+		Direction direction;
 		int xPos;
                 int yPos;
 		Segment *next;
 		bool head;
 		char letter;
-
+		queue<DirectionXY> segTurns;
 	public:
 		Segment();
-		Segment(Direction,int,int);
+		Segment(Direction,int,int,queue<DirectionXY>);
 		char getLetter(int);
 		int getHeadXPos();
 		int getHeadYPos();
-		void changeDirection(char);
+		void changeDirection(char,Segment*);
+		void updateDirection(Segment*);
 		void updatePos(Segment*);
 		vector<int> getAllXPos();
 		vector<int> getAllYPos();

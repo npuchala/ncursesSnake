@@ -27,7 +27,7 @@ void game(char *ch){
 		*ch = '1';
 		n.addNext();
 	}
-	n.changeDirection(*ch);
+	n.changeDirection(*ch,&n);
 	n.updatePos(&n);
 	this_thread::sleep_for(50ms);
 	clear();
@@ -37,7 +37,8 @@ void game(char *ch){
 	yPos = n.getAllXPos();
 	for(int i = 0; i < xPos.size(); i++){
 		mvprintw(0,0,"xPos.size()%i",xPos.size());//don't forget the \n
-		mvprintw(1,0,"xPos%i\n",xPos.back());
+		mvprintw(1,0,"xPos%i\n",yPos.back());
+		mvprintw(2,0,"xPos%i\n",n.getLastXPos());
 		
 		//mvprintw(1,0,"Head xPos: %i",n.getHeadXPos());
 		//mvprintw(2,0,"Head yPos: %i",n.getHeadYPos());

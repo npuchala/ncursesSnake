@@ -4,7 +4,7 @@ a.out: main.o Segment.o
 main.o: main.cpp Segment.h
 	g++ -c -g main.cpp -lncurses -pthread
 
-Segment.o: Segment.cpp Segment.h
+Segment.o: Segment.cpp Segment.h utility.h
 	g++ -c -g Segment.cpp
 
 clean:
