@@ -37,8 +37,8 @@ void game(char *ch){
 	yPos = n.getAllXPos();
 	for(int i = 0; i < xPos.size(); i++){
 		mvprintw(0,0,"xPos.size()%i",xPos.size());//don't forget the \n
-		mvprintw(1,0,"xPos%i\n",yPos.back());
-		mvprintw(2,0,"xPos%i\n",n.getLastXPos());
+		mvprintw(1,0,"Head xPos: %i yPos: %i",n.getHeadXPos(), n.getHeadYPos());
+		mvprintw(2,0,"Tail xPos: %i yPos: %i",n.getLastXPos(), n.getLastYPos());
 		
 		//mvprintw(1,0,"Head xPos: %i",n.getHeadXPos());
 		//mvprintw(2,0,"Head yPos: %i",n.getHeadYPos());

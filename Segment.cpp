@@ -203,9 +203,11 @@ int Segment::getLastXPos(){
 	if(next == NULL){
 		return xPos;
 	}else{
-		for(Segment *q= next; q->next != NULL; q = q->next){
+		Segment *q= next;
+		for(; q->next != NULL; q = q->next){
 			lastX = q->xPos;
 		}
+		lastX = q->xPos;
 		return lastX;
 	}
 }
@@ -214,9 +216,11 @@ int Segment::getLastYPos(){
 	if(next == NULL){
 		return yPos;
 	}else{
-		for(Segment *q= next; q->next != NULL; q = q->next){
+		Segment *q= next;
+		for(; q->next != NULL; q = q->next){
 			lastY = q->yPos;
 		}
+		lastY = q->yPos;
 		return lastY;
 	}
 }
