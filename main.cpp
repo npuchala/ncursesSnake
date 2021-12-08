@@ -2,56 +2,83 @@
 #include"Segment.h"
 #include<string>
 #include<thread>
-
 #include<vector>
 #include<chrono>
 
 using namespace std;
 
-
+/*A function the gets the key inputs*/
 void chooseChar(char *ch){//& sends a reference to the function
-	*ch = getch();
-
+	while(*ch != 'q'){
+		*ch = getch();
+	}
 }
 
 
+void game(char *ch, Segment n, vector<int> xPos,vector<int> yPos){
+char a;
+int oldLXPos, oldLYPos = 50;
+int hits = 0;
+	while(*ch != 'q'){
+		if(*ch == 'x'){
+			*ch = '1';
+			n.addNext();
+		}
 
 
-Segment n;//don't keep this here
-vector<int> xPos;
-vector<int> yPos;
+		this_thread::sleep_for(100ms);
 
-void game(char *ch){
-	//mvprintw(0,0,"\n");
-	if(*ch == 'x'){
-		*ch = '1';
-		n.addNext();
+		n.changeDirection(*ch,&n);
+		n.updatePos(&n);
+
+
+		//Option 1 for drawing the snake;
+		/*clear();
+		xPos.clear();
+		yPos.clear();
+		yPos = n.getAllYPos();
+		xPos = n.getAllXPos();
+
+		for(int i = 0; i < xPos.size(); i++){
+			mvprintw(0,0,"xPos.size()%i",xPos.size());
+			mvprintw(1,0,"Head xPos: %i yPos: %i",n.getHeadXPos(), n.getHeadYPos());
+			mvprintw(2,0,"Tail xPos: %i yPos: %i",n.getLastXPos(), n.getLastYPos());
+			mvprintw(yPos[i],xPos[i],"%c", n.getLetter(i));
+		}*/
+		//Option 1 for drawing the snake
+
+		a = mvinch(n.getHeadYPos(), n.getHeadXPos());
+		mvprintw(0,0,"%c", a);
+		mvprintw(1,0,"%i", hits);
+
+
+
+		//Pauses the loop once an x is hit 
+		if(a == 'x' && oldLXPos != n.getLastYPos())//put this in segment
+		{
+			hits++;
+/*
+			clear();
+			*ch = NULL;
+			delete &n;
+			&n = new Segment();
+*/
+		}
+		 //Not exactly this but you know what 
+
+
+
+		mvprintw(oldLYPos,oldLXPos,"%c", ' ');
+		mvprintw(n.getLastYPos(),n.getLastXPos(),"%c", 'x');
+		mvprintw(n.getHeadYPos(), n.getHeadXPos(),"%c", 'x');
+		oldLYPos = n.getLastYPos();
+		oldLXPos = n.getLastXPos();
+
+
+		refresh();
 	}
-	n.changeDirection(*ch,&n);
-	n.updatePos(&n);
-	this_thread::sleep_for(100ms);
-	clear();
-	xPos.clear();
-	yPos.clear();
-	xPos = n.getAllYPos();
-	yPos = n.getAllXPos();
-	for(int i = 0; i < xPos.size(); i++){
-		mvprintw(0,0,"xPos.size()%i",xPos.size());//don't forget the \n
-		mvprintw(1,0,"Head xPos: %i yPos: %i",n.getHeadXPos(), n.getHeadYPos());
-		mvprintw(2,0,"Tail xPos: %i yPos: %i",n.getLastXPos(), n.getLastYPos());
-		
-		//mvprintw(1,0,"Head xPos: %i",n.getHeadXPos());
-		//mvprintw(2,0,"Head yPos: %i",n.getHeadYPos());
-		mvprintw(xPos[i],yPos[i],"%c", n.getLetter(i));
-	}
-
-	//mvprintw(0,0,"Character pressed %i", n.getDirection());
-	refresh();
-
-
-
-
 }
+
 void loop(void (*func)(char *ch), char *ch){
 	while(*ch != 'q'){
 		func(ch);
@@ -68,11 +95,16 @@ int main()
 	keypad(stdscr,true);
 
 
-	//xPos = n.getXPos();
-	//yPos = n.getYPos();
-	threads.push_back(thread(loop,&game,&ch));
-	threads.push_back(thread(loop,&chooseChar,&ch));
+//	threads.push_back(thread(loop,&game,&ch));
+//	threads.push_back(thread(loop,&chooseChar,&ch));
 
+
+	Segment n;
+	vector<int> xPos;
+	vector<int> yPos;
+
+	threads.push_back(thread(game,&ch,n,xPos,yPos));
+	threads.push_back(thread(chooseChar,&ch));
 
 
 
