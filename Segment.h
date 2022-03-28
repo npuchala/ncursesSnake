@@ -18,12 +18,14 @@ class Segment{
 		Direction direction;
 		int xPos;
                 int yPos;
+		int bottomBoundary;
+		int rightBoundary;
 		Segment *next;
 		bool head;
 		char letter;
 		queue<DirectionXY> segTurns;
 	public:
-		Segment();
+		Segment(int,int);
 		Segment(Direction,int,int,queue<DirectionXY>);
 		char getLetter(int);
 		int getHeadXPos();

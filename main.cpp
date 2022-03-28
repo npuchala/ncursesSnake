@@ -50,6 +50,8 @@ int hits = 0;
 		a = mvinch(n.getHeadYPos(), n.getHeadXPos());
 		mvprintw(0,0,"%c", a);
 		mvprintw(1,0,"%i", hits);
+		mvprintw(2,0,"LINES %i", LINES);
+		mvprintw(3,0,"COLS %i", COLS);
 
 
 
@@ -99,7 +101,7 @@ int main()
 //	threads.push_back(thread(loop,&chooseChar,&ch));
 
 
-	Segment n;
+	Segment n(COLS-1,LINES-1);
 	vector<int> xPos;
 	vector<int> yPos;
 

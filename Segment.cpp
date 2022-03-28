@@ -1,17 +1,19 @@
 #include"Segment.h"
 
-const int rightBoundary = 236;
-const int bottomBoundary = 62;
+//const int rightBoundary = 236;
+//const int bottomBoundary = 62;
 
-Segment::Segment(){
+Segment::Segment(int rB, int bB){
 	//
 	letter = 'H';
 	head = true;
 	direction = no;
-	xPos = 50;
-	yPos = 50;
+	xPos = rB/2;
+	yPos = bB/2;
 	segTurns.empty();
 	next = NULL;
+	rightBoundary = rB;
+	bottomBoundary = bB;
 }
 
 Segment::Segment(Direction d, int x, int y,queue<DirectionXY> oldQueue){
@@ -27,9 +29,11 @@ Segment::Segment(Direction d, int x, int y,queue<DirectionXY> oldQueue){
 		break;
 		case left:
 			x++;
+			//x++;
 		break;
 		case right:
 			x--;
+			//x--;
 		break;
 	}
 	xPos = x;
@@ -137,22 +141,14 @@ void Segment::updatePos(Segment *seg){
 			}
 		break;
 		case down:
-			switch(seg->yPos){
-				case bottomBoundary:
-				break;
-				default:
+			if(seg->yPos != bottomBoundary)
 					seg->yPos++;
-				break;
-			}
 		break;
 		case right:
-			switch(seg->xPos){
-				case rightBoundary:
-				break;
-				default:
+			if(seg->xPos != rightBoundary){
 					seg->xPos++;
-				break;
-			}
+					//seg->xPos++;
+					}
 		break;
 		case left:
 			switch(seg->xPos){
@@ -160,6 +156,7 @@ void Segment::updatePos(Segment *seg){
 				break;
 				default:
 					seg->xPos--;
+					//seg->xPos--;
 				break;
 			}
 		break;
