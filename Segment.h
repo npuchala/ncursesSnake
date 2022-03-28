@@ -17,7 +17,7 @@ class Segment{
 	private:
 		Direction direction;
 		int xPos;
-                int yPos;
+        int yPos;
 		int bottomBoundary;
 		int rightBoundary;
 		Segment *next;

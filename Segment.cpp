@@ -129,6 +129,12 @@ void Segment::updateDirection(Segment *seg){
 		seg->segTurns.pop();
 	}
 }
+
+
+/*Head doesn't need to have an updated direction as it is updated when the direction is changed with a key
+  The segments trailing need an updated direction as they are updated when they arive at a certain xy coordinate
+  The commented out seg->x(y)Pos++(--) were to create an even travel horizontal and vertical
+*/
 void Segment::updatePos(Segment *seg){
 	switch(seg->direction){
 		case up:

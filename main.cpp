@@ -4,6 +4,7 @@
 #include<thread>
 #include<vector>
 #include<chrono>
+#include<cstdlib>
 
 using namespace std;
 
@@ -15,14 +16,23 @@ void chooseChar(char *ch){//& sends a reference to the function
 }
 
 
-void game(char *ch, Segment n, vector<int> xPos,vector<int> yPos){
+void game(char *ch, Segment n, vector<int> xPos,vector<int> yPos,int rows, int cols){
 char a;
+
+int rowApple;
+int colApple;
+bool eaten = true;
 int oldLXPos, oldLYPos = 50;
 int hits = 0;
+
 	while(*ch != 'q'){
 		if(*ch == 'x'){
 			*ch = '1';
 			n.addNext();
+		}
+		if(eaten){
+			mvprintw(rand()%rows, rand()% cols,"%c", 'a');
+			eaten = false;
 		}
 
 
@@ -56,7 +66,7 @@ int hits = 0;
 
 
 		//Pauses the loop once an x is hit 
-		if(a == 'x' && oldLXPos != n.getLastYPos())//put this in segment
+		if(a == 'x' && oldLXPos != n.getLastYPos()  )//put this in segment
 		{
 			hits++;
 /*
@@ -65,6 +75,10 @@ int hits = 0;
 			delete &n;
 			&n = new Segment();
 */
+		}
+		if(a == 'a'){
+			n.addNext();
+			eaten =true;
 		}
 		 //Not exactly this but you know what 
 
@@ -96,16 +110,11 @@ int main()
 	noecho();
 	keypad(stdscr,true);
 
-
-//	threads.push_back(thread(loop,&game,&ch));
-//	threads.push_back(thread(loop,&chooseChar,&ch));
-
-
 	Segment n(COLS-1,LINES-1);
 	vector<int> xPos;
 	vector<int> yPos;
 
-	threads.push_back(thread(game,&ch,n,xPos,yPos));
+	threads.push_back(thread(game,&ch,n,xPos,yPos,LINES,COLS));
 	threads.push_back(thread(chooseChar,&ch));
 
 
