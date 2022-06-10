@@ -16,7 +16,7 @@ void chooseChar(char *ch){//& sends a reference to the function
 }
 
 
-void game(char *ch, Segment n, vector<int> xPos,vector<int> yPos,int rows, int cols){
+void game(char *ch, Segment *n, vector<int> xPos,vector<int> yPos,int rows, int cols){
 char a;
 
 int rowApple;
@@ -27,8 +27,8 @@ int hits = 0;
 
 	while(*ch != 'q'){
 		if(*ch == 'x'){
-			*ch = '1';
-			n.addNext();
+			*ch = '\0';
+			n->addNext();
 		}
 		if(eaten){
 			mvprintw(rand()%rows, rand()% cols,"%c", 'a');
@@ -38,8 +38,8 @@ int hits = 0;
 
 		this_thread::sleep_for(100ms);
 
-		n.changeDirection(*ch,&n);
-		n.updatePos(&n);
+		n->changeDirection(*ch,n);
+		n->updatePos(n);
 
 
 		//Option 1 for drawing the snake;
@@ -57,7 +57,7 @@ int hits = 0;
 		}*/
 		//Option 1 for drawing the snake
 
-		a = mvinch(n.getHeadYPos(), n.getHeadXPos());
+		a = mvinch(n->getHeadYPos(), n->getHeadXPos());
 		mvprintw(0,0,"%c", a);
 		mvprintw(1,0,"%i", hits);
 		mvprintw(2,0,"LINES %i", LINES);
@@ -66,56 +66,53 @@ int hits = 0;
 
 
 		//Pauses the loop once an x is hit 
-		if(a == 'x' && oldLXPos != n.getLastYPos()  )//put this in segment
+		if(a == 'x' && oldLXPos != n->getLastYPos() && (*ch == 'a' || *ch == 's' || *ch == 'd' || *ch == 'w') )//put this in segment
 		{
 			hits++;
-/*
+
 			clear();
-			*ch = NULL;
-			delete &n;
-			&n = new Segment();
-*/
+			*ch = '\0';
+			delete(n);
+			Segment *n = new Segment(COLS-1,LINES-1);
+			eaten = true;
+
 		}
+
 		if(a == 'a'){
-			n.addNext();
-			eaten =true;
+			n->addNext();
+			eaten = true;
 		}
 		 //Not exactly this but you know what 
 
 
 
 		mvprintw(oldLYPos,oldLXPos,"%c", ' ');
-		mvprintw(n.getLastYPos(),n.getLastXPos(),"%c", 'x');
-		mvprintw(n.getHeadYPos(), n.getHeadXPos(),"%c", 'x');
-		oldLYPos = n.getLastYPos();
-		oldLXPos = n.getLastXPos();
+		mvprintw(n->getLastYPos(),n->getLastXPos(),"%c", 'x');
+		mvprintw(n->getHeadYPos(), n->getHeadXPos(),"%c", 'x');
+		oldLYPos = n->getLastYPos();
+		oldLXPos = n->getLastXPos();
 
 
 		refresh();
 	}
 }
 
-void loop(void (*func)(char *ch), char *ch){
-	while(*ch != 'q'){
-		func(ch);
-	}
-}
 
 int main()
 {
-	char ch;
+	char *ch;
 	initscr();			/* Start curses mode 		  */
 	cbreak();
 	vector<thread> threads;		/*use a vector to hold the threads while*/
 	noecho();
 	keypad(stdscr,true);
 
-	Segment n(COLS-1,LINES-1);
+	Segment *n = new Segment(COLS-1,LINES-1);
 	vector<int> xPos;
 	vector<int> yPos;
 
-	threads.push_back(thread(game,&ch,n,xPos,yPos,LINES,COLS));
-	threads.push_back(thread(chooseChar,&ch));
+	threads.push_back(thread(game,ch,n,xPos,yPos,LINES,COLS));
+	threads.push_back(thread(chooseChar,ch));
 
 
 
