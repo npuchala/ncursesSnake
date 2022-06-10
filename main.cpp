@@ -16,9 +16,9 @@ void chooseChar(char *ch){//& sends a reference to the function
 }
 
 
-void game(char *ch, Segment *n, vector<int> xPos,vector<int> yPos,int rows, int cols){
-char a;
-
+void game(char *ch, Segment *snake, vector<int> xPos,vector<int> yPos,int rows, int cols){
+char currentCollision;
+bool debug = false;
 int rowApple;
 int colApple;
 bool eaten = true;
@@ -28,7 +28,7 @@ int hits = 0;
 	while(*ch != 'q'){
 		if(*ch == 'x'){
 			*ch = '\0';
-			n->addNext();
+			snake->addNext();
 		}
 		if(eaten){
 			mvprintw(rand()%rows, rand()% cols,"%c", 'a');
@@ -38,59 +38,39 @@ int hits = 0;
 
 		this_thread::sleep_for(100ms);
 
-		n->changeDirection(*ch,n);
-		n->updatePos(n);
+		snake->changeDirection(*ch,snake);
+		snake->updatePos(snake);
 
-
-		//Option 1 for drawing the snake;
-		/*clear();
-		xPos.clear();
-		yPos.clear();
-		yPos = n.getAllYPos();
-		xPos = n.getAllXPos();
-
-		for(int i = 0; i < xPos.size(); i++){
-			mvprintw(0,0,"xPos.size()%i",xPos.size());
-			mvprintw(1,0,"Head xPos: %i yPos: %i",n.getHeadXPos(), n.getHeadYPos());
-			mvprintw(2,0,"Tail xPos: %i yPos: %i",n.getLastXPos(), n.getLastYPos());
-			mvprintw(yPos[i],xPos[i],"%c", n.getLetter(i));
-		}*/
-		//Option 1 for drawing the snake
-
-		a = mvinch(n->getHeadYPos(), n->getHeadXPos());
-		mvprintw(0,0,"%c", a);
-		mvprintw(1,0,"%i", hits);
-		mvprintw(2,0,"LINES %i", LINES);
-		mvprintw(3,0,"COLS %i", COLS);
-
-
+		currentCollision = mvinch(snake->getHeadYPos(), snake->getHeadXPos());
+		if(debug){
+			mvprintw(0,0,"%c", currentCollision);
+			mvprintw(1,0,"%i", hits);
+			mvprintw(2,0,"LINES %i", LINES);
+			mvprintw(3,0,"COLS %i", COLS);
+		}
 
 		//Pauses the loop once an x is hit 
-		if(a == 'x' && oldLXPos != n->getLastYPos() && (*ch == 'a' || *ch == 's' || *ch == 'd' || *ch == 'w') )//put this in segment
+		if(currentCollision == 'x' && oldLXPos != snake->getLastYPos() && (*ch == 'a' || *ch == 's' || *ch == 'd' || *ch == 'w') )
 		{
 			hits++;
-
 			clear();
 			*ch = '\0';
-			delete(n);
-			Segment *n = new Segment(COLS-1,LINES-1);
+			delete(snake);
+			Segment *snake = new Segment(COLS-1,LINES-1);
 			eaten = true;
 
 		}
 
-		if(a == 'a'){
-			n->addNext();
+		if(currentCollision == 'a'){
+			snake->addNext();
 			eaten = true;
 		}
-		 //Not exactly this but you know what 
-
-
 
 		mvprintw(oldLYPos,oldLXPos,"%c", ' ');
-		mvprintw(n->getLastYPos(),n->getLastXPos(),"%c", 'x');
-		mvprintw(n->getHeadYPos(), n->getHeadXPos(),"%c", 'x');
-		oldLYPos = n->getLastYPos();
-		oldLXPos = n->getLastXPos();
+		mvprintw(snake->getLastYPos(),snake->getLastXPos(),"%c", 'x');
+		mvprintw(snake->getHeadYPos(), snake->getHeadXPos(),"%c", 'x');
+		oldLYPos = snake->getLastYPos();
+		oldLXPos = snake->getLastXPos();
 
 
 		refresh();
