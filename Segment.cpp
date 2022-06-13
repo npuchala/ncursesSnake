@@ -1,10 +1,8 @@
 #include"Segment.h"
-
 //const int rightBoundary = 236;
 //const int bottomBoundary = 62;
 
 Segment::Segment(int rB, int bB){
-	//
 	letter = 'H';
 	head = true;
 	direction = no;
@@ -42,6 +40,7 @@ Segment::Segment(Direction d, int x, int y,queue<DirectionXY> oldQueue){
 	segTurns = oldQueue;
 	next = NULL;
 }
+
 
 char Segment::getLetter(int segmentPlace){
 	Segment *q = this;
@@ -247,3 +246,7 @@ void Segment::addNext(){
 	}
 
 }
+Direction Segment::getDirection(){
+	return direction;
+}
+
