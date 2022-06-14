@@ -27,7 +27,6 @@ class Segment{
 	public:
 		Segment(int,int);
 		Segment(Direction,int,int,queue<DirectionXY>);
-		void deleteLastSegment(Segment*);
 		char getLetter(int);
 		int getHeadXPos();
 		int getHeadYPos();

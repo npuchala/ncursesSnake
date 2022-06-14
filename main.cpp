@@ -66,11 +66,17 @@ void game(char *ch, Segment *snake, vector<int> xPos,vector<int> yPos,int rows, 
 			mvprintw(3,0,"COLS %i", COLS);
 		}
 		if(eaten){
+			rowApple = rand()%rows;
+			colApple = rand()%cols;
+			while(mvinch(rowApple,colApple) != ' '){
+				rowApple = rand()%rows;
+				colApple = rand()%cols;
+			}
 			mvprintw(rand()%rows, rand()% cols,"%c", APPLE);
 			eaten = false;
 		}
-		this_thread::sleep_for(100ms);
 
+		this_thread::sleep_for(100ms);
 		snake->changeDirection(*ch,snake);
 		snake->updatePos(snake);
 		currentCollision = mvinch(snake->getHeadYPos(), snake->getHeadXPos());
